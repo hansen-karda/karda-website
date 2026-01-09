@@ -22,7 +22,7 @@ function App() {
                     </Link>
 
                     <div className="hidden md:flex items-center gap-8 text-xs font-medium text-white/60 tracking-widest">
-                        <Link to="/" className={`hover:text-white transition-colors ${location.pathname === '/' ? 'text-white' : ''}`}>THESIS</Link>
+                        <Link to="/" className={`hover:text-white transition-colors ${location.pathname === '/' ? 'text-white' : ''}`}>VENTURES</Link>
                         <Link to="/portfolio" className={`hover:text-white transition-colors ${location.pathname === '/portfolio' ? 'text-white' : ''}`}>PORTFOLIO</Link>
                         <span className="cursor-not-allowed opacity-50">PROPRIETARY</span>
                         <Link to="/" className="hover:text-white transition-colors">CONTACT</Link>
@@ -34,12 +34,12 @@ function App() {
             <Routes>
                 {/* HOME PAGE */}
                 <Route path="/" element={
-                    <main className="min-h-screen w-full flex flex-col pt-20 relative overflow-hidden">
+                    <main className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden pt-20">
                         {/* Background Ambience */}
                         <div className="absolute inset-0 bg-karda-void pointer-events-none" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glow-radial opacity-40 animate-glow-pulse pointer-events-none" />
 
-                        <div className="max-w-4xl mx-auto mt-20 flex flex-col items-center text-center z-10 px-6">
+                        <div className="z-10 flex flex-col items-center gap-8 md:gap-12 max-w-4xl px-6">
 
                             {/* HERO LOGO AREA */}
                             <div className="w-[300px] h-[300px] mb-8 relative group flex items-center justify-center">
