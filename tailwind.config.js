@@ -13,6 +13,7 @@ export default {
             },
             fontFamily: {
                 sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+                nasa: ['Orbitron', 'sans-serif'],
             },
             animation: {
                 'glow-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

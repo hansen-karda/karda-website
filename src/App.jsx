@@ -18,7 +18,7 @@ function App() {
                     <Link to="/" className="flex items-center gap-2 group">
                         {/* LOGO ICON PLACEHOLDER */}
                         <div className="w-8 h-8 bg-karda-silver rounded-sm flex items-center justify-center text-karda-void font-bold text-xs group-hover:scale-105 transition-transform">K</div>
-                        <span className="text-sm font-semibold tracking-[0.2em] text-white">KARDA</span>
+                        <span className="text-sm font-nasa font-bold tracking-[0.2em] text-white">KARDA</span>
                     </Link>
 
                     <div className="hidden md:flex items-center gap-8 text-xs font-medium text-white/60 tracking-widest">
@@ -50,16 +50,16 @@ function App() {
                                 />
                             </div>
 
-                            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                            <h1 className="text-4xl md:text-6xl font-nasa font-bold tracking-tight text-white mb-6 text-center">
                                 PREMIER INFRASTRUCTURE ASSETS.
                             </h1>
 
-                            <p className="text-sm md:text-base text-white/50 tracking-[0.2em] max-w-lg mb-10">
+                            <p className="text-sm md:text-base text-white/50 tracking-[0.2em] max-w-lg mb-10 text-center">
                                 THE NEW STANDARD IN CAPITAL ALLOCATION
                             </p>
 
-                            <Link to="/portfolio" className="group flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-500 rounded-sm">
-                                <span className="text-xs font-medium tracking-widest text-karda-silver">INITIATE PROTOCOL</span>
+                            <Link to="/portfolio" className="group flex items-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 transition-all duration-500 rounded-sm">
+                                <span className="text-sm font-nasa tracking-widest text-karda-silver">VIEW AVAILABLE INVENTORY</span>
                                 <ChevronRight className="w-4 h-4 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all" />
                             </Link>
                         </div>
