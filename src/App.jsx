@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Activity, Globe, ArrowRight, Menu } from 'lucide-react';
+import Inventory from './components/Inventory';
 
 // --- ASSET PIPELINE ---
 // INSTRUCTION: Drag your 'karda-platinum-logo.png' into src/assets/
@@ -9,9 +10,9 @@ import { ShieldCheck, Activity, Globe, ArrowRight, Menu } from 'lucide-react';
 import kardaLogo from './assets/karda-platinum-logo.png';
 // const kardaLogo = null;
 
-const Navbar = () => (
+const Navbar = ({ setView }) => (
   <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-karda-void/70 border-b border-white/5 h-20 flex items-center justify-between px-8 md:px-16">
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
       {/* Small Nav Logo */}
       <div className="w-8 h-8 bg-karda-silver rounded-sm flex items-center justify-center text-karda-void font-bold text-xs">
         K
@@ -20,10 +21,19 @@ const Navbar = () => (
     </div>
 
     <div className="hidden md:flex items-center gap-8">
-      {['VENTURES', 'INFRASTRUCTURE', 'PROPRIETARY', 'CONTACT'].map((item) => (
-        <a key={item} href="#" className="text-xs text-white/60 hover:text-karda-silver transition-colors tracking-widest">
-          {item}
-        </a>
+      {[
+        { label: 'VENTURES', view: 'landing' },
+        { label: 'PORTFOLIO', view: 'inventory' },
+        { label: 'PROPRIETARY', view: 'landing' },
+        { label: 'CONTACT', view: 'landing' }
+      ].map((item) => (
+        <button
+          key={item.label}
+          onClick={() => setView(item.view)}
+          className="text-xs text-white/60 hover:text-karda-silver transition-colors tracking-widest uppercase"
+        >
+          {item.label}
+        </button>
       ))}
     </div>
 
@@ -33,7 +43,7 @@ const Navbar = () => (
   </nav>
 );
 
-const Hero = () => {
+const Hero = ({ setView }) => {
   return (
     <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-20">
       {/* Background Ambience */}
@@ -50,13 +60,14 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
-          className="relative w-[300px] h-[300px] flex items-center justify-center"
+          className="relative w-[300px] h-[300px] flex items-center justify-center cursor-pointer group"
+          onClick={() => setView('inventory')}
         >
           {kardaLogo ? (
             <img
               src={kardaLogo}
               alt="Karda Logo"
-              className="w-full h-full object-contain drop-shadow-2xl mix-blend-screen"
+              className="w-full h-full object-contain drop-shadow-2xl mix-blend-screen transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="w-48 h-48 border border-white/20 rounded-full flex items-center justify-center bg-white/5 backdrop-blur-sm relative overflow-hidden group">
@@ -94,6 +105,7 @@ const Hero = () => {
 
         {/* Action */}
         <motion.button
+          onClick={() => setView('inventory')}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
@@ -131,11 +143,20 @@ const TrustSignals = () => {
 };
 
 function App() {
+  const [view, setView] = useState('landing');
+
   return (
     <div className="bg-karda-void min-h-screen text-karda-silver font-sans selection:bg-white/20">
-      <Navbar />
-      <Hero />
-      <TrustSignals />
+      <Navbar setView={setView} />
+
+      {view === 'landing' ? (
+        <>
+          <Hero setView={setView} />
+          <TrustSignals />
+        </>
+      ) : (
+        <Inventory />
+      )}
 
       {/* Footer minimal */}
       <footer className="py-8 text-center border-t border-white/5 bg-karda-mud">
