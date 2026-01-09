@@ -17,7 +17,7 @@ function App() {
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <Link to="/" className="flex items-center gap-2 group">
                         {/* LOGO ICON PLACEHOLDER REMOVED */}
-                        <span className="text-sm font-nasa font-bold tracking-[0.2em] text-white">KARDA</span>
+                        <span className="text-2xl font-nasa font-bold tracking-[0.2em] text-white">KARDA</span>
                     </Link>
 
                     <div className="hidden md:flex items-center gap-8 text-xs font-medium text-white/60 tracking-widest">
@@ -38,10 +38,10 @@ function App() {
                         <div className="absolute inset-0 bg-karda-void pointer-events-none" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glow-radial opacity-40 animate-glow-pulse pointer-events-none" />
 
-                        <div className="z-10 flex flex-col items-center gap-6 md:gap-8 max-w-4xl px-6">
+                        <div className="z-10 flex flex-col items-center gap-8 max-w-4xl px-6">
 
                             {/* HERO LOGO AREA */}
-                            <div className="w-[200px] h-[200px] relative group flex items-center justify-center">
+                            <div className="w-[450px] h-[450px] relative group flex items-center justify-center">
                                 <img
                                     src={kardaLogo}
                                     alt="Karda Logo"
@@ -49,7 +49,7 @@ function App() {
                                 />
                             </div>
 
-                            <h1 className="text-4xl md:text-6xl font-nasa font-bold tracking-tight text-white mb-4 text-center">
+                            <h1 className="text-2xl md:text-4xl font-nasa font-bold tracking-tight text-white mb-4 text-center">
                                 PREMIER INFRASTRUCTURE ASSETS.
                             </h1>
 
