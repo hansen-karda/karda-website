@@ -7,9 +7,9 @@ export default {
     theme: {
         extend: {
             colors: {
-                'karda-void': '#FFFFFF',
-                'karda-mud': '#F5F5F7',
-                'karda-silver': '#111111',
+                'karda-void': '#050505',
+                'karda-mud': '#1a1a1a',
+                'karda-silver': '#E5E4E2',
             },
             fontFamily: {
                 sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
@@ -18,7 +18,7 @@ export default {
                 'glow-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             backgroundImage: {
-                'glow-radial': 'radial-gradient(circle, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0) 70%)',
+                'glow-radial': 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(5,5,5,0) 70%)',
             }
         },
     },
