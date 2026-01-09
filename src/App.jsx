@@ -12,7 +12,7 @@ import kardaLogo from './assets/karda-platinum-logo.png';
 
 const Navbar = ({ setView }) => (
   <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-karda-void/70 border-b border-white/5 h-20 flex items-center justify-between px-8 md:px-16">
-    <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
+    <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('home')}>
       {/* Small Nav Logo */}
       <div className="w-8 h-8 bg-karda-silver rounded-sm flex items-center justify-center text-karda-void font-bold text-xs">
         K
@@ -22,10 +22,10 @@ const Navbar = ({ setView }) => (
 
     <div className="hidden md:flex items-center gap-8">
       {[
-        { label: 'VENTURES', view: 'landing' },
+        { label: 'THESIS', view: 'home' },
         { label: 'PORTFOLIO', view: 'inventory' },
-        { label: 'PROPRIETARY', view: 'landing' },
-        { label: 'CONTACT', view: 'landing' }
+        { label: 'PROPRIETARY', view: 'home' },
+        { label: 'CONTACT', view: 'home' }
       ].map((item) => (
         <button
           key={item.label}
@@ -143,13 +143,13 @@ const TrustSignals = () => {
 };
 
 function App() {
-  const [view, setView] = useState('landing');
+  const [view, setView] = useState('home');
 
   return (
     <div className="bg-karda-void min-h-screen text-karda-silver font-sans selection:bg-white/20">
       <Navbar setView={setView} />
 
-      {view === 'landing' ? (
+      {view === 'home' ? (
         <>
           <Hero setView={setView} />
           <TrustSignals />
