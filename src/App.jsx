@@ -1,86 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Globe, Shield, TrendingUp, ChevronRight } from 'lucide-react';
+import { Menu } from 'lucide-react';
 // IMPORT YOUR INVENTORY COMPONENT
 import Inventory from './components/Inventory';
-// IMPORT YOUR LOGO (Uncomment when ready)
-import kardaLogo from './assets/karda-platinum-logo.png';
 
-function App() {
+const Navbar = () => {
     const location = useLocation();
 
     return (
-        <div className="min-h-screen bg-karda-void text-karda-silver font-sans selection:bg-karda-silver selection:text-karda-void">
-
-            {/* NAVIGATION BAR */}
-            <nav className="fixed w-full z-50 bg-karda-void/80 backdrop-blur-md border-b border-white/5">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        {/* LOGO ICON PLACEHOLDER REMOVED */}
-                        <span className="text-2xl font-nasa font-bold tracking-[0.2em] text-white">KARDA</span>
+        <nav className="fixed top-0 w-full z-50 mix-blend-difference px-8 md:px-16 py-8 flex justify-end items-center">
+            <div className="hidden md:flex items-center gap-12">
+                {[
+                    { label: 'VENTURES', path: '/' },
+                    { label: 'PORTFOLIO', path: '/portfolio' },
+                    { label: 'PROPRIETARY', path: '/' },
+                    { label: 'CONTACT', path: '/' }
+                ].map((item) => (
+                    <Link
+                        key={item.label}
+                        to={item.path}
+                        className={`text-[10px] font-nasa tracking-[0.3em] transition-opacity duration-300 ${location.pathname === item.path && item.label !== 'CONTACT' && item.label !== 'PROPRIETARY' ? 'text-white opacity-100' : 'text-white/60 hover:text-white hover:opacity-100'}`}
+                    >
+                        {item.label}
                     </Link>
+                ))}
+            </div>
 
-                    <div className="hidden md:flex items-center gap-8 text-xs font-medium text-white/60 tracking-widest">
-                        <Link to="/" className={`hover:text-white transition-colors ${location.pathname === '/' ? 'text-white' : ''}`}>VENTURES</Link>
-                        <Link to="/portfolio" className={`hover:text-white transition-colors ${location.pathname === '/portfolio' ? 'text-white' : ''}`}>PORTFOLIO</Link>
-                        <span className="cursor-not-allowed opacity-50">PROPRIETARY</span>
-                        <Link to="/" className="hover:text-white transition-colors">CONTACT</Link>
-                    </div>
-                </div>
-            </nav>
+            <button className="md:hidden text-white">
+                <Menu size={24} />
+            </button>
+        </nav>
+    );
+};
 
-            {/* PAGE ROUTING */}
+const Hero = () => {
+    return (
+        <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
+
+            {/* Main Content */}
+            <div className="z-10 flex flex-col items-center w-full max-w-[90vw]">
+
+                {/* THE WORD MARK */}
+                <h1 className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-400 to-gray-600 animate-pulse-slow select-none mb-12">
+                    KARDA
+                </h1>
+
+                {/* SUBTITLE */}
+                <h2 className="text-xs md:text-sm font-nasa text-white/80 tracking-[0.5em] mb-4 text-center">
+                    PREMIER INFRASTRUCTURE ASSETS
+                </h2>
+
+                {/* TAGLINE */}
+                <p className="text-[10px] md:text-xs text-white/40 tracking-[0.3em] mb-20 text-center uppercase">
+                    The New Standard in Capital Allocation
+                </p>
+
+                {/* CTA */}
+                <Link to="/portfolio">
+                    <button
+                        className="group relative px-10 py-4 border border-white/20 hover:border-white/60 transition-all duration-500 rounded-none overflow-hidden"
+                    >
+                        <span className="relative z-10 text-[10px] font-nasa tracking-[0.3em] text-white group-hover:text-black transition-colors duration-500">
+                            VIEW AVAILABLE INVENTORY &gt;
+                        </span>
+                        <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ease-out" />
+                    </button>
+                </Link>
+
+            </div>
+        </section>
+    );
+};
+
+function App() {
+    return (
+        <div className="bg-black min-h-screen text-white font-sans selection:bg-white selection:text-black">
+            <Navbar />
             <Routes>
-                {/* HOME PAGE */}
-                <Route path="/" element={
-                    <main className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden pt-20">
-                        {/* Background Ambience */}
-                        <div className="absolute inset-0 bg-karda-void pointer-events-none" />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glow-radial opacity-40 animate-glow-pulse pointer-events-none" />
-
-                        <div className="z-10 flex flex-col items-center gap-2 max-w-4xl px-6">
-
-                            {/* TEXT LOGO ONLY */}
-                            <h1 className="text-[120px] md:text-[180px] leading-none font-nasa font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 drop-shadow-2xl mb-4 select-none">
-                                KARDA
-                            </h1>
-
-                            <h2 className="text-xl md:text-2xl font-nasa font-bold tracking-[0.5em] text-white/80 mb-8 text-center">
-                                PREMIER INFRASTRUCTURE ASSETS
-                            </h2>
-
-                            <p className="text-xs md:text-sm text-white/40 tracking-[0.2em] max-w-lg mb-12 text-center">
-                                THE NEW STANDARD IN CAPITAL ALLOCATION
-                            </p>
-
-                            <Link to="/portfolio" className="group flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-500 rounded-sm">
-                                <span className="text-xs font-nasa tracking-widest text-karda-silver">VIEW AVAILABLE INVENTORY</span>
-                                <ChevronRight className="w-4 h-4 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                            </Link>
-                        </div>
-
-                        {/* TRUST SIGNALS */}
-                        <section className="w-full max-w-7xl mx-auto mt-32 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                            <div className="p-12 flex flex-col items-center text-center hover:bg-white/5 transition-colors">
-                                <Globe className="w-8 h-8 text-white/40 mb-6" />
-                                <h3 className="text-sm font-bold text-white tracking-widest mb-3">GLOBAL DEPLOYMENT</h3>
-                                <p className="text-white/40 text-xs leading-relaxed max-w-xs">Strategic asset acquisition across key energy markets.</p>
-                            </div>
-                            <div className="p-12 flex flex-col items-center text-center hover:bg-white/5 transition-colors">
-                                <Shield className="w-8 h-8 text-white/40 mb-6" />
-                                <h3 className="text-sm font-bold text-white tracking-widest mb-3">INSTITUTIONAL SECURITY</h3>
-                                <p className="text-white/40 text-xs leading-relaxed max-w-xs">OpSec-first architecture protecting physical value.</p>
-                            </div>
-                            <div className="p-12 flex flex-col items-center text-center hover:bg-white/5 transition-colors">
-                                <TrendingUp className="w-8 h-8 text-white/40 mb-6" />
-                                <h3 className="text-sm font-bold text-white tracking-widest mb-3">PROVEN PERFORMANCE</h3>
-                                <p className="text-white/40 text-xs leading-relaxed max-w-xs">Optimizing yield through intelligent management.</p>
-                            </div>
-                        </section>
-                    </main>
-                } />
-
-                {/* PORTFOLIO PAGE */}
+                <Route path="/" element={<Hero />} />
                 <Route path="/portfolio" element={<Inventory />} />
             </Routes>
         </div>
