@@ -31,13 +31,8 @@ const normalizeAsset = (asset) => ({
 });
 
 const Inventory = () => {
-    const [assets, setAssets] = useState(LOCAL_MANIFEST.map(item => ({
-        ...item,
-        name: item.type, // Map local 'type' to 'name' for consistency
-        type: 'Transformer',
-        specs: { ...item.specs, load: item.specs.load_capacity || 0 }
-    })));
-    const [selected, setSelected] = useState(assets[0]);
+    const [assets, setAssets] = useState(null);
+    const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
 
     // Fetch from Sanity
@@ -67,9 +62,16 @@ const Inventory = () => {
                     const normalized = sanityData.map(normalizeAsset);
                     setAssets(normalized);
                     setSelected(normalized[0]);
+                } else {
+                    // Fallback if Sanity is empty but connected
+                    setAssets([]);
                 }
             } catch (error) {
-                console.log("Sanity fetch failed, using local manifest.");
+                console.log("Sanity fetch failed:", error);
+                // In case of error, we can either show error or empty. 
+                // User requested "Only real sanity data", so we'll leave it empty or mock if strictly needed.
+                // For now, let's allow the loading to finish so we don't hang.
+                setAssets([]);
             } finally {
                 setLoading(false);
             }
@@ -77,6 +79,27 @@ const Inventory = () => {
 
         fetchInventory();
     }, []);
+
+    if (loading) {
+        return (
+            <div className="h-screen w-full bg-black flex items-center justify-center font-mono">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+                    <div className="text-green-500 text-sm tracking-[0.2em] animate-pulse">
+                        &gt; ESTABLISHING_SECURE_UPLINK...
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!assets || assets.length === 0) {
+        return (
+            <div className="h-screen w-full bg-black flex items-center justify-center text-white/30 font-mono tracking-widest">
+                NO ASSETS DETECTED IN SECURE STORAGE
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-black text-white p-4 pt-24 font-mono">
@@ -86,8 +109,8 @@ const Inventory = () => {
                 <div>
                     <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v2.1</h2>
                     <div className="flex items-center gap-2 mt-2 text-gray-400">
-                        <span className={`w-2 h-2 rounded-full animate-pulse ${loading ? 'bg-amber-500' : 'bg-green-500'}`}></span>
-                        <span>{loading ? 'SYNCING_DB...' : 'LIVE_FEED // SECURE_CONNECTION'}</span>
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span>LIVE_FEED // SECURE_CONNECTION</span>
                     </div>
                 </div>
                 <div className="hidden md:block text-right text-gray-500">
