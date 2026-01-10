@@ -38,27 +38,23 @@ function App() {
                         <div className="absolute inset-0 bg-karda-void pointer-events-none" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-glow-radial opacity-40 animate-glow-pulse pointer-events-none" />
 
-                        <div className="z-10 flex flex-col items-center gap-8 max-w-4xl px-6">
+                        <div className="z-10 flex flex-col items-center gap-2 max-w-4xl px-6">
 
-                            {/* HERO LOGO AREA */}
-                            <div className="w-[450px] h-[450px] relative group flex items-center justify-center">
-                                <img
-                                    src={kardaLogo}
-                                    alt="Karda Logo"
-                                    className="w-full h-full object-contain drop-shadow-2xl mix-blend-screen transition-transform duration-700 group-hover:scale-105"
-                                />
-                            </div>
-
-                            <h1 className="text-2xl md:text-4xl font-nasa font-bold tracking-tight text-white mb-4 text-center">
-                                PREMIER INFRASTRUCTURE ASSETS.
+                            {/* TEXT LOGO ONLY */}
+                            <h1 className="text-[120px] md:text-[180px] leading-none font-nasa font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50 drop-shadow-2xl mb-4 select-none">
+                                KARDA
                             </h1>
 
-                            <p className="text-sm md:text-base text-white/50 tracking-[0.2em] max-w-lg mb-8 text-center">
+                            <h2 className="text-xl md:text-2xl font-nasa font-bold tracking-[0.5em] text-white/80 mb-8 text-center">
+                                PREMIER INFRASTRUCTURE ASSETS
+                            </h2>
+
+                            <p className="text-xs md:text-sm text-white/40 tracking-[0.2em] max-w-lg mb-12 text-center">
                                 THE NEW STANDARD IN CAPITAL ALLOCATION
                             </p>
 
-                            <Link to="/portfolio" className="group flex items-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 transition-all duration-500 rounded-sm">
-                                <span className="text-sm font-nasa tracking-widest text-karda-silver">VIEW AVAILABLE INVENTORY</span>
+                            <Link to="/portfolio" className="group flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-500 rounded-sm">
+                                <span className="text-xs font-nasa tracking-widest text-karda-silver">VIEW AVAILABLE INVENTORY</span>
                                 <ChevronRight className="w-4 h-4 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all" />
                             </Link>
                         </div>
