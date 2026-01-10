@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Activity, Zap, ChevronRight, maximize2, Crosshair } from 'lucide-react';
 import transformerImg from '../assets/transformer-1.png';
-
-import { ASSET_MANIFEST } from '../data/manifest';
+import { ASSET_MANIFEST as LOCAL_MANIFEST } from '../data/manifest';
+import { client, urlFor } from '../sanityClient';
+import groq from 'groq';
 
 const SpecBar = ({ label, value }) => (
     <div className="flex items-center gap-4 mb-2">
@@ -21,7 +22,58 @@ const SpecBar = ({ label, value }) => (
 );
 
 const Inventory = () => {
-    const [selectedAsset, setSelectedAsset] = useState(ASSET_MANIFEST[0]);
+    const [assets, setAssets] = useState(LOCAL_MANIFEST);
+    const [selectedAsset, setSelectedAsset] = useState(LOCAL_MANIFEST[0]);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch from Sanity
+    useEffect(() => {
+        const fetchInventory = async () => {
+            try {
+                const query = groq`* [_type == "inventory"]{
+    _id,
+        id,
+        type,
+        voltage,
+        status,
+        price,
+        specs {
+        efficiency,
+            load_capacity,
+            durability,
+            shielding
+    },
+    desc,
+        image
+} `;
+
+                const sanityData = await client.fetch(query);
+
+                if (sanityData && sanityData.length > 0) {
+                    // Normalize/Map if needed, for now assuming 1:1 schema match or close enough
+                    // If Sanity has data, we prioritize it.
+                    console.log("Loaded from Sanity:", sanityData);
+                    setAssets(sanityData);
+                    setSelectedAsset(sanityData[0]);
+                }
+            } catch (error) {
+                console.log("Sanity fetch failed (likely not configured yet), using local manifest.");
+                console.error(error); // Log the actual error for debugging
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchInventory();
+    }, []);
+
+    // Helper to resolve image source
+    const getImageUrl = (asset) => {
+        if (asset.image && asset.image.asset) {
+            return urlFor(asset.image).width(800).url();
+        }
+        return transformerImg; // Fallback
+    };
 
     return (
         <section className="h-screen w-full bg-black pt-24 px-4 pb-4 overflow-hidden flex flex-col font-mono">
@@ -33,7 +85,10 @@ const Inventory = () => {
                     <span className="text-xs tracking-[0.2em] uppercase">KARDA_ASSET_TERMINAL_V2.0</span>
                 </div>
                 <div className="flex items-center gap-4 text-[10px] text-white/30">
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-green-900 animate-pulse" /> SYSTEM_ONLINE</div>
+                    <div className="flex items-center gap-1">
+                        <div className={`w-2 h-2 rounded-full ${loading ? 'bg-amber-500' : 'bg-green-900'} animate-pulse`} />
+                        {loading ? 'SYNCING_DB...' : 'SYSTEM_ONLINE'}
+                    </div>
                     <span>SECURE_CONNECTION</span>
                 </div>
             </div>
@@ -46,25 +101,31 @@ const Inventory = () => {
                         ASSET MANIFEST
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
-                        {ASSET_MANIFEST.map((asset) => (
+                        {assets.map((asset) => (
                             <button
-                                key={asset.id}
+                                key={asset._id || asset.id}
                                 onClick={() => setSelectedAsset(asset)}
-                                className={`w-full text-left p-4 border-b border-white/5 transition-all duration-200 group relative ${selectedAsset.id === asset.id
+                                className={`w - full text - left p - 4 border - b border - white / 5 transition - all duration - 200 group relative ${(selectedAsset._id || selectedAsset.id) === (asset._id || asset.id)
                                     ? 'bg-white text-black'
                                     : 'text-gray-500 hover:bg-white/5 hover:text-white'
-                                    }`}
+                                    } `}
                             >
-                                {selectedAsset.id === asset.id && (
+                                {(selectedAsset._id || selectedAsset.id) === (asset._id || asset.id) && (
                                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-karda-silver" />
                                 )}
                                 <div className="flex justify-between items-start mb-1">
                                     <span className="text-[10px] tracking-wider font-bold">{asset.id}</span>
-                                    <span className={`text-[9px] px-1 py-0.5 border ${selectedAsset.id === asset.id ? 'border-black text-black' : 'border-white/20 text-white/40'}`}>
+                                    <span className={`text - [9px] px - 1 py - 0.5 border ${(selectedAsset._id || selectedAsset.id) === (asset._id || asset.id)
+                                        ? 'border-black text-black'
+                                        : 'border-white/20 text-white/40'
+                                        } `}>
                                         {asset.status}
                                     </span>
                                 </div>
-                                <div className={`text-xs truncate font-medium ${selectedAsset.id === asset.id ? 'text-black' : 'text-gray-300'}`}>
+                                <div className={`text - xs truncate font - medium ${(selectedAsset._id || selectedAsset.id) === (asset._id || asset.id)
+                                    ? 'text-black'
+                                    : 'text-gray-300'
+                                    } `}>
                                     {asset.type}
                                 </div>
                             </button>
