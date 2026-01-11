@@ -55,16 +55,49 @@ const Inventory = () => {
     const [loading, setLoading] = useState(true);
     const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-    // Boot Sequence Logic
+    // Boot Sequence & Data Fetching
     useEffect(() => {
-        const bootTimer = setTimeout(() => {
-            const data = REAL_ASSETS_V5;
-            setAssets(data);
-            setSelected(data[0]);
-            setLoading(false);
-        }, 300);
+        const initTerminal = async () => {
+            // 1. Fetch Real Data from Sanity
+            try {
+                const query = groq`*[_type == "inventory"]{
+                    ...,
+                    "imageUrls": images[].asset->url
+                }`;
+                const sanityData = await client.fetch(query);
 
-        return () => clearTimeout(bootTimer);
+                // 2. Merge Sanity Images into our Psychology-Driven Data Structure
+                // (This allows us to keep the rich sales copy while pulling real images)
+                const mergedData = REAL_ASSETS_V5.map((localAsset, index) => {
+                    // Simple merge strategy: If Sanity has data, use its images.
+                    // We map the first Sanity item to our first local item for now.
+                    const cloudAsset = sanityData[index];
+                    if (cloudAsset && cloudAsset.imageUrls) {
+                        return {
+                            ...localAsset,
+                            images: cloudAsset.imageUrls // Use real Cloud images
+                        };
+                    }
+                    return localAsset;
+                });
+
+                // 3. Simulate Boot Delay for Effect
+                setTimeout(() => {
+                    setAssets(mergedData);
+                    setSelected(mergedData[0]);
+                    setLoading(false);
+                }, 800);
+
+            } catch (err) {
+                console.error("Uplink Failed:", err);
+                // Fallback to local data if sanity fails
+                setAssets(REAL_ASSETS_V5);
+                setSelected(REAL_ASSETS_V5[0]);
+                setLoading(false);
+            }
+        };
+
+        initTerminal();
     }, []);
 
     useEffect(() => {
@@ -210,8 +243,8 @@ const Inventory = () => {
                                         key={idx}
                                         onClick={() => setActiveImageIndex(idx)}
                                         className={`relative h-full aspect-square border-2 transition-all duration-300 overflow-hidden bg-gray-900 group ${activeImageIndex === idx
-                                                ? 'border-green-500 opacity-100'
-                                                : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
+                                            ? 'border-green-500 opacity-100'
+                                            : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
                                             }`}
                                     >
                                         <img src={img} className="w-full h-full object-cover" alt="thumbnail" />

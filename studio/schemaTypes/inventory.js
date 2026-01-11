@@ -54,11 +54,15 @@ export default {
             type: 'text'
         },
         {
-            name: 'image',
-            title: 'Asset Image',
-            type: 'image',
+            name: 'images',
+            title: 'Gallery',
+            type: 'array',
+            of: [{
+                type: 'image',
+                options: { hotspot: true }
+            }],
             options: {
-                hotspot: true
+                layout: 'grid'
             }
         }
     ]
