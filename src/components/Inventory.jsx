@@ -243,10 +243,13 @@ const Inventory = () => {
                             </div>
 
                             <div className="mt-auto">
-                                <button className="w-full bg-white text-black font-bold uppercase py-4 px-8 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 tracking-wider">
+                                <a
+                                    href={`mailto:n.hansen@karda.tech?subject=Acquisition Protocol: ${selected.id} - ${selected.name}&body=I am interested in acquiring the ${selected.name} (${selected.id}) located in ${selected.location}. Please provide full spec sheet and wiring capabilities.`}
+                                    className="w-full bg-white text-black font-bold uppercase py-4 px-8 hover:bg-green-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 tracking-wider group"
+                                >
                                     <span>Initiate Acquisition Protocol</span>
-                                    <ChevronRight size={16} />
-                                </button>
+                                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                </a>
                             </div>
                         </div>
                     </div>
