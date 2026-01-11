@@ -45,14 +45,25 @@ const Navbar = () => {
 const Hero = () => {
     const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0, visible: false });
 
+    // Animation Loop: Keeps electricity flowing when cursor is stationary
+    useEffect(() => {
+        let interval;
+        if (cursor.visible) {
+            interval = setInterval(() => {
+                setCursor(prev => ({ ...prev, seed: Math.random() * 100 }));
+            }, 50); // 20fps Spark Loop
+        }
+        return () => clearInterval(interval);
+    }, [cursor.visible]);
+
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        setCursor({
+        setCursor(prev => ({
+            ...prev,
             x: e.clientX - rect.left,
             y: e.clientY - rect.top,
-            seed: Math.random() * 100,
             visible: true
-        });
+        }));
     };
 
     const handleMouseLeave = () => {
@@ -69,7 +80,7 @@ const Hero = () => {
                         <feTurbulence
                             type="fractalNoise"
                             baseFrequency="0.04"
-                            numOctaves="3"
+                            numOctaves="4"
                             seed={cursor.seed}
                             result="noise"
                         />
@@ -79,9 +90,10 @@ const Hero = () => {
                             values="0 0 0 0 0
                                     0 0 0 0 0
                                     0 0 0 0 0
-                                    0 0 0 45 -25"
+                                    0 0 0 130 -80"
                             result="veins"
                         />
+                        {/* 130 -80 = Ultra Thin Filaments */}
                         <feFlood floodColor="#38bdf8" floodOpacity="1" result="color" />
                         <feComposite operator="in" in="color" in2="veins" result="coloredveins" />
                         <feComposite operator="in" in="coloredveins" in2="SourceGraphic" />
@@ -115,12 +127,12 @@ const Hero = () => {
                         className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
                         style={{
                             color: 'white',
-                            filter: 'url(#plasma-bolts) drop-shadow(0 0 10px #38bdf8)',
+                            filter: 'url(#plasma-bolts) drop-shadow(0 0 4px #38bdf8)',
                             mixBlendMode: 'screen',
                             opacity: cursor.visible ? 1 : 0,
-                            transition: 'opacity 0.2s ease-out',
-                            WebkitMaskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`,
-                            maskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`
+                            transition: 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                            WebkitMaskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 90%)`,
+                            maskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 90%)`
                         }}
                     >
                         KARDA
