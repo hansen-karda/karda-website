@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge } from 'lucide-react';
+import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar } from 'lucide-react';
 import { client, urlFor } from '../sanityClient';
 import groq from 'groq';
 import transformerImg from '../assets/transformer-1.png';
 
-// Hardcoded real assets for V3.0 per requested spec
-// In a real production scenario, we would map Sanity data to this structure
-// But for this request, we use the specific static data provided
-const REAL_ASSETS_V3 = [
+// REAL ASSETS V4.0 w/ Weight, Year, Description
+const REAL_ASSETS_V4 = [
     {
         id: 'TR-SUN-2500',
-        name: '2500 KVA SUNBELT PAD', // Short name for Sidebar
-        fullName: 'Sunbelt Multi-Tap Step-Up Pad-Mount Transformer', // Long name for Header
-        type: 'Step-Up Transformer',
-        voltage: '480V -> 14.4kV (Multi-Tap)',
-        impedance: '5.75%',  // NEW FIELD
-        location: 'Odessa, TX Yard', // NEW FIELD
+        name: '2500 KVA SUNBELT PAD',
+        type: 'Multi-Tap Step-Up',
+        voltage: '480V -> 14.4kV',
+        impedance: '5.75%',
+        location: 'ODESSA, TX YARD',
+        weight: '6,200 LBS',
+        mfgYear: '2023',
         status: 'AVAILABLE',
         price: '$60,000',
-        // GALLERY ARRAY
+        description: 'Sunbelt Multi-Tap Step-Up Pad-Mount. Mineral Oil Filled. Taps: 14,400 / 13,800 / 13,200 / 12,870 / 12,470 / 12,000 / 11,700.',
         images: [
-            transformerImg, // Main front view
+            transformerImg,
             transformerImg,
             transformerImg
         ],
@@ -30,14 +29,16 @@ const REAL_ASSETS_V3 = [
     {
         id: 'TR-SUB-50M',
         name: '50 MVA SUBSTATION',
-        fullName: 'High Voltage Substation Class Unit',
-        type: 'Substation',
+        type: 'Substation Class',
         voltage: '69kV / 13.8kV',
         impedance: '7.15%',
-        location: 'Nevada Storage',
+        location: 'NEVADA STORAGE',
+        weight: '84,000 LBS',
+        mfgYear: '2022',
         status: 'PENDING',
         price: '$850,000',
-        images: [], // Empty array = show placeholder
+        description: 'High-voltage substation class unit. Nitrogen filled for transport. Ready for immediate deployment.',
+        images: [],
         specs: { efficiency: 99, load: 95, shielding: 90 }
     }
 ];
@@ -50,17 +51,12 @@ const Inventory = () => {
 
     // Boot Sequence Logic
     useEffect(() => {
-        // 1. Simulate Boot Sequence (1.5s)
+        // 1. Simulate Boot Sequence (700ms)
         const bootTimer = setTimeout(() => {
-
-            // 2. Load Data (Here we use the defined Const, but simulating a Fetch)
-            // In future state, this would be: const data = await client.fetch(query);
-            const data = REAL_ASSETS_V3;
-
+            const data = REAL_ASSETS_V4;
             setAssets(data);
             setSelected(data[0]);
             setLoading(false);
-
         }, 700);
 
         return () => clearTimeout(bootTimer);
@@ -85,7 +81,7 @@ const Inventory = () => {
                         &gt; ESTABLISHING_SECURE_UPLINK...
                     </div>
                     <div className="text-green-900/50 text-[10px] tracking-widest mt-2">
-                        ENCRYPTING V3.0 PROTOCOLS
+                        ENCRYPTING V4.0 PROTOCOLS
                     </div>
                 </div>
             </div>
@@ -106,7 +102,7 @@ const Inventory = () => {
                     <Link to="/" className="block mb-4 hover:opacity-70 transition-opacity">
                         <h1 className="text-3xl font-black tracking-tighter italic">KARDA</h1>
                     </Link>
-                    <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v3.0</h2>
+                    <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v4.0</h2>
                     <div className="flex items-center gap-2 mt-2 text-gray-400 text-xs tracking-wider">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                         <span>LIVE_FEED // SECURE_CONNECTION</span>
@@ -161,41 +157,30 @@ const Inventory = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8 border-b border-white/10 pb-6">
                         <div className="flex-1">
                             <div className="text-xs text-green-500 mb-2 tracking-widest uppercase">Target Selected</div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight uppercase leading-none mb-2">
-                                {selected.fullName}
+                            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight uppercase leading-none mb-4">
+                                {selected.name}
                             </h1>
-                            <div className="flex flex-wrap gap-4 text-xs md:text-sm text-gray-400 font-bold mt-4">
-                                <span className="flex items-center gap-2 border border-white/10 px-3 py-1 bg-white/5">
-                                    <Zap size={14} className="text-yellow-400" /> {selected.voltage}
-                                </span>
-                                <span className="flex items-center gap-2 border border-white/10 px-3 py-1 bg-white/5">
-                                    <Gauge size={14} className="text-blue-400" /> %Z: {selected.impedance}
-                                </span>
-                                <span className="flex items-center gap-2 border border-white/10 px-3 py-1 bg-white/5">
-                                    <MapPin size={14} className="text-red-400" /> {selected.location}
-                                </span>
-                            </div>
+                            <p className="text-gray-400 text-sm max-w-xl leading-relaxed border-l-2 border-white/10 pl-4 py-1">
+                                {selected.description}
+                            </p>
                         </div>
-                        <div className="text-right min-w-[150px]">
-                            <div className="text-gray-500 text-[10px] uppercase mb-1 tracking-widest">Acquisition Cost</div>
-                            <div className="text-3xl font-bold text-white tracking-tighter">{selected.price}</div>
+                        <div className="text-right min-w-[200px]">
+                            <div className="text-gray-500 text-[10px] uppercase mb-1 tracking-widest">Global Valuation</div>
+                            <div className="text-4xl md:text-5xl font-black text-white tracking-tighter">{selected.price}</div>
                         </div>
                     </div>
 
                     {/* Main Visual Area + Gallery Strip */}
                     <div className="flex-1 flex flex-col gap-4 min-h-[400px]">
 
-                        {/* MAIN VIEW */}
-                        <div className="flex-1 relative bg-gradient-to-tr from-gray-900 via-gray-900 to-gray-800 rounded-sm border border-white/10 flex items-center justify-center p-8 group overflow-hidden">
-
-                            {/* Hex Grid Overlay */}
-                            <div className="absolute inset-0 bg-[radial-gradient(#ffffff10_1px,transparent_1px)] [background-size:16px_16px] opacity-20 pointer-events-none" />
+                        {/* MAIN VIEW - DIGITAL HANGAR BACKGROUND */}
+                        <div className="flex-1 relative bg-[#0a0a0a] rounded-sm border border-white/10 flex items-center justify-center p-8 group overflow-hidden bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]">
 
                             {selected.images && selected.images.length > 0 ? (
                                 <img
                                     src={selected.images[activeImageIndex]}
                                     alt="Active View"
-                                    className="w-full h-full object-contain filter drop-shadow-2xl transition-all duration-500 group-hover:scale-105"
+                                    className="w-full h-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 group-hover:scale-105 z-10"
                                 />
                             ) : (
                                 <div className="flex flex-col items-center gap-4 opacity-30">
@@ -203,6 +188,9 @@ const Inventory = () => {
                                     <span className="text-xs tracking-widest">NO VISUAL FEED AVAILABLE</span>
                                 </div>
                             )}
+
+                            {/* Floor Grid Reflection Effect (Fake) */}
+                            <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none z-0" />
                         </div>
 
                         {/* THUMBNAIL STRIP */}
@@ -213,8 +201,8 @@ const Inventory = () => {
                                         key={idx}
                                         onClick={() => setActiveImageIndex(idx)}
                                         className={`relative h-full aspect-square border-2 transition-all duration-300 overflow-hidden bg-gray-900 group ${activeImageIndex === idx
-                                            ? 'border-green-500 opacity-100'
-                                            : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
+                                                ? 'border-green-500 opacity-100'
+                                                : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
                                             }`}
                                     >
                                         <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
@@ -225,19 +213,51 @@ const Inventory = () => {
                         )}
                     </div>
 
-                    {/* Bottom Specs HUD */}
+                    {/* Bottom Specs HUD - V4.0 MATRIX */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 pt-8 border-t border-white/10">
-                        <div className="space-y-4">
-                            <SpecBar label="EFFICIENCY" value={selected.specs.efficiency} icon={<Activity size={14} />} />
-                            <SpecBar label="LOAD CAPACITY" value={selected.specs.load} icon={<Zap size={14} />} />
-                            <SpecBar label="SHIELDING" value={selected.specs.shielding} icon={<Shield size={14} />} />
+
+                        {/* LEFT: 2x2 DATA GRID */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-white/5 p-3 border border-white/10">
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <Gauge size={12} /> Impedance (%Z)
+                                </div>
+                                <div className="text-xl font-mono text-white">{selected.impedance}</div>
+                            </div>
+                            <div className="bg-white/5 p-3 border border-white/10">
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <MapPin size={12} /> Location
+                                </div>
+                                <div className="text-xl font-mono text-white truncate">{selected.location}</div>
+                            </div>
+                            <div className="bg-white/5 p-3 border border-white/10">
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <Scale size={12} /> Weight
+                                </div>
+                                <div className="text-xl font-mono text-white">{selected.weight}</div>
+                            </div>
+                            <div className="bg-white/5 p-3 border border-white/10">
+                                <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                    <Calendar size={12} /> Mfg. Year
+                                </div>
+                                <div className="text-xl font-mono text-white">{selected.mfgYear}</div>
+                            </div>
                         </div>
 
-                        <div className="flex items-end justify-end">
-                            <button className="w-full md:w-auto bg-white text-black font-bold uppercase py-4 px-8 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
-                                <span>Initiate Acquisition Protocol</span>
-                                <ChevronRight size={16} />
-                            </button>
+                        {/* RIGHT: PROGRESS BARS & ACTION */}
+                        <div className="flex flex-col gap-6">
+                            <div className="space-y-4">
+                                <SpecBar label="EFFICIENCY" value={selected.specs.efficiency} icon={<Activity size={14} />} />
+                                <SpecBar label="LOAD CAPACITY" value={selected.specs.load} icon={<Zap size={14} />} />
+                                <SpecBar label="SHIELDING" value={selected.specs.shielding} icon={<Shield size={14} />} />
+                            </div>
+
+                            <div className="mt-auto">
+                                <button className="w-full bg-white text-black font-bold uppercase py-4 px-8 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 tracking-wider">
+                                    <span>Initiate Acquisition Protocol</span>
+                                    <ChevronRight size={16} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -249,11 +269,11 @@ const Inventory = () => {
 
 const SpecBar = ({ label, value, icon }) => (
     <div className="flex items-center gap-4 group">
-        <div className="text-gray-500 w-32 text-xs flex items-center gap-2 group-hover:text-white transition-colors">
+        <div className="text-gray-500 w-28 text-[10px] uppercase flex items-center gap-2 group-hover:text-white transition-colors">
             {icon}
             {label}
         </div>
-        <div className="flex-1 h-2 bg-gray-900 border border-white/10 relative overflow-hidden rounded-sm">
+        <div className="flex-1 h-1.5 bg-gray-900 border border-white/10 relative overflow-hidden rounded-sm">
             <div
                 className="h-full bg-white group-hover:bg-green-400 transition-all duration-1000 ease-out"
                 style={{ width: `${value}%` }}
