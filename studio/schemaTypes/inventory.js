@@ -96,6 +96,17 @@ export default {
             group: 'technical',
             description: 'e.g., ONAN, KNAN, ONAF'
         },
+        {
+            name: 'specs',
+            title: 'Performance Specs (Matrix)',
+            type: 'object',
+            group: 'technical',
+            fields: [
+                { name: 'efficiency', title: 'Efficiency (%)', type: 'number' },
+                { name: 'load', title: 'Load Capacity (%)', type: 'number' },
+                { name: 'shielding', title: 'Shielding (dB)', type: 'number' }
+            ]
+        },
 
         // --- LOGISTICS & CONDITION ---
         {
