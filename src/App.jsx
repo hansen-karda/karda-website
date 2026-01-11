@@ -45,13 +45,13 @@ const Navbar = () => {
 const Hero = () => {
     const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0, visible: false });
 
-    // Animation Loop: Keeps sparks alive (Optimized interval)
+    // Animation Loop: Keeps the Galaxy Streaks moving
     useEffect(() => {
         let interval;
         if (cursor.visible) {
             interval = setInterval(() => {
                 setCursor(prev => ({ ...prev, seed: Math.random() * 100 }));
-            }, 60); // 60ms = ~15fps (Cinematic Spark Rate)
+            }, 60);
         }
         return () => clearInterval(interval);
     }, [cursor.visible]);
@@ -73,14 +73,14 @@ const Hero = () => {
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
-            {/* OPTIMIZED SPARK FILTER */}
+            {/* GALAXY STREAK FILTER */}
             <svg className="absolute w-0 h-0">
                 <defs>
                     <filter id="plasma-bolts" x="-50%" y="-50%" width="200%" height="200%">
-                        {/* 1 Octave = Max Performance. Turbulence = Jagged Sparks */}
+                        {/* 0.002 X = Stretched infinitely horizontal. 0.5 Y = Distinct rows */}
                         <feTurbulence
-                            type="turbulence"
-                            baseFrequency="0.12"
+                            type="fractalNoise"
+                            baseFrequency="0.002 0.5"
                             numOctaves="1"
                             seed={cursor.seed}
                             result="noise"
@@ -91,13 +91,12 @@ const Hero = () => {
                             values="0 0 0 0 0
                                     0 0 0 0 0
                                     0 0 0 0 0
-                                    0 0 0 100 -60"
-                            result="sparks"
+                                    0 0 0 50 -30"
+                            result="streaks"
                         />
-                        {/* Extreme Contrast for Dot/Spark isolation */}
                         <feFlood floodColor="#38bdf8" floodOpacity="1" result="color" />
-                        <feComposite operator="in" in="color" in2="sparks" result="coloredSparks" />
-                        <feComposite operator="in" in="coloredSparks" in2="SourceGraphic" />
+                        <feComposite operator="in" in="color" in2="streaks" result="coloredStreaks" />
+                        <feComposite operator="in" in="coloredStreaks" in2="SourceGraphic" />
                     </filter>
                 </defs>
             </svg>
@@ -123,17 +122,17 @@ const Hero = () => {
                         KARDA
                     </h1>
 
-                    {/* LAYER 2: The Spark Ignition (Cursor Masked) */}
+                    {/* LAYER 2: The Galaxy Streak Ignition (Cursor Masked) */}
                     <h1
                         className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
                         style={{
                             color: 'white',
-                            filter: 'url(#plasma-bolts) drop-shadow(0 0 2px #38bdf8)',
+                            filter: 'url(#plasma-bolts) drop-shadow(0 0 4px #38bdf8)',
                             mixBlendMode: 'screen',
                             opacity: cursor.visible ? 1 : 0,
-                            transition: 'opacity 0.1s',
-                            WebkitMaskImage: `radial-gradient(circle 100px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 70%)`,
-                            maskImage: `radial-gradient(circle 100px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 70%)`
+                            transition: 'opacity 0.2s',
+                            WebkitMaskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`,
+                            maskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`
                         }}
                     >
                         KARDA
@@ -145,20 +144,33 @@ const Hero = () => {
                     PREMIER INFRASTRUCTURE SOLUTIONS
                 </h2>
 
-                {/* CTA */}
+                {/* CTA - FORCED YELLOW REACTIVITY */}
                 <Link to="/portfolio">
                     <button
-                        className="group relative px-10 py-4 border border-white/20 hover:border-white/60 transition-all duration-500 rounded-none overflow-hidden"
+                        className="group relative px-10 py-4 border transition-all duration-300 rounded-none overflow-hidden"
+                        style={{
+                            borderColor: cursor.visible ? '#FACC15' : 'rgba(255,255,255,0.2)',
+                            boxShadow: cursor.visible ? '0 0 30px rgba(250,204,21,0.5)' : 'none',
+                            transform: cursor.visible ? 'scale(1.05)' : 'scale(1)'
+                        }}
                     >
-                        <span className="relative z-10 text-[10px] font-nasa tracking-[0.3em] text-white group-hover:text-black transition-colors duration-500">
+                        <span
+                            className="relative z-10 text-[10px] font-nasa tracking-[0.3em] transition-colors duration-300"
+                            style={{
+                                color: cursor.visible ? '#FACC15' : 'white',
+                            }}
+                        >
                             VIEW AVAILABLE INVENTORY &gt;
                         </span>
+
+                        {/* Hover Overlay (Only shows on actual mouse hover of button, independent of Logo effect) */}
                         <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ease-out" />
                     </button>
                 </Link>
 
-            </div>
-        </section>
+
+            </div >
+        </section >
     );
 };
 
