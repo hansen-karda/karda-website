@@ -64,7 +64,7 @@ const Hero = () => {
                     onMouseMove={handleMouseMove}
                     className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-crosshair active:scale-95 transition-transform duration-100"
                     style={{
-                        backgroundImage: `radial-gradient(circle 400px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #111111 80%, #000000 100%)`,
+                        backgroundImage: `radial-gradient(circle 300px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #9ca3af 50%, #4b5563 100%)`,
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent'
                     }}
