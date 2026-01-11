@@ -60,39 +60,47 @@ const Inventory = () => {
     // Boot Sequence & Data Fetching
     useEffect(() => {
         const initTerminal = async () => {
-            // 1. Fetch Real Data from Sanity
             try {
+                // 1. Fetch Real Data from Sanity
                 const query = groq`*[_type == "inventory"]{
                     ...,
                     "imageUrls": images[].asset->url
                 }`;
                 const sanityData = await client.fetch(query);
 
-                // 2. Merge Sanity Images into our Psychology-Driven Data Structure
-                // (This allows us to keep the rich sales copy while pulling real images)
-                const mergedData = REAL_ASSETS_V5.map((localAsset, index) => {
-                    // Simple merge strategy: If Sanity has data, use its images.
-                    // We map the first Sanity item to our first local item for now.
-                    const cloudAsset = sanityData[index];
-                    if (cloudAsset && cloudAsset.imageUrls) {
-                        return {
-                            ...localAsset,
-                            images: cloudAsset.imageUrls // Use real Cloud images
-                        };
-                    }
-                    return localAsset;
-                });
+                if (sanityData && sanityData.length > 0) {
+                    // 2. Map Sanity Data to UI Structure (Sanity First)
+                    const liveAssets = sanityData.map(item => ({
+                        id: item.id || 'NO-ID',
+                        name: item.type || 'Unnamed Asset', // Note: Schema uses 'type' for title/name
+                        type: 'Infrastructure',
+                        voltage: item.voltage || 'N/A',
+                        impedance: '5.75%', // Default for now
+                        location: 'USA LOGISTICS HUB', // Default
+                        weight: 'TBD',
+                        mfgYear: '2024',
+                        condition: 'CERTIFIED',
+                        status: item.status || 'AVAILABLE',
+                        leadTimeSavings: '40+ WEEKS', // Sales Psychology Default
+                        price: item.price || 'Inquire for Price',
+                        description: item.desc || 'High-voltage infrastructure asset available for immediate deployment.',
+                        images: item.imageUrls || [],
+                        specs: item.specs || { efficiency: 98, load: 100, shielding: 85 }
+                    }));
 
-                // 3. Simulate Boot Delay for Effect
-                setTimeout(() => {
-                    setAssets(mergedData);
-                    setSelected(mergedData[0]);
-                    setLoading(false);
-                }, 800);
+                    // Simulate Boot Delay
+                    setTimeout(() => {
+                        setAssets(liveAssets);
+                        setSelected(liveAssets[0]);
+                        setLoading(false);
+                    }, 800);
+                } else {
+                    // Fallback if Sanity is empty
+                    throw new Error("No Sanity data found");
+                }
 
             } catch (err) {
-                console.error("Uplink Failed:", err);
-                // Fallback to local data if sanity fails
+                console.warn("Uplink Failed or Empty, switching to Backup Protocol:", err);
                 setAssets(REAL_ASSETS_V5);
                 setSelected(REAL_ASSETS_V5[0]);
                 setLoading(false);
