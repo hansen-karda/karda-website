@@ -43,14 +43,13 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-    const [cursor, setCursor] = useState({ x: 0, y: 0, spark: 0 });
+    const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setCursor({
             x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            spark: Date.now() % 100 // Rapid changing value for jitter
+            y: e.clientY - rect.top
         });
     };
 
@@ -60,28 +59,19 @@ const Hero = () => {
             {/* Main Content */}
             <div className="z-10 flex flex-col items-center w-full max-w-[90vw]">
 
-                {/* THE WORD MARK - ELECTRIC CIRCUIT EFFECT */}
+                {/* THE WORD MARK - HIGH VOLTAGE PLASMA */}
                 <h1
                     onMouseMove={handleMouseMove}
-                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-crosshair active:scale-95 transition-transform duration-100"
+                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-default transition-transform duration-100"
                     style={{
                         backgroundImage: `
-                            radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, rgba(255,255,255,1) 0%, rgba(56,189,248,0.8) 30%, transparent 60%),
-                            repeating-linear-gradient(90deg, transparent 0%, transparent 48%, rgba(255,255,255,0.9) 50%, transparent 52%),
-                            repeating-linear-gradient(0deg, transparent 0%, transparent 48%, rgba(255,255,255,0.9) 50%, transparent 52%),
+                            radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #38bdf8 30%, transparent 60%),
                             linear-gradient(to bottom, #4b5563, #1f2937)
                         `,
-                        backgroundPosition: `
-                            0 0, 
-                            ${cursor.spark * 4}px 0, 
-                            0 ${cursor.spark * 7}px,
-                            0 0
-                        `,
-                        backgroundSize: `auto, 60px 200px, 200px 60px, auto`,
-                        backgroundBlendMode: 'overlay, overlay, overlay, normal',
+                        backgroundBlendMode: 'hard-light, normal',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        filter: 'drop-shadow(0 0 8px rgba(56, 189, 248, 0.6))'
+                        filter: 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.4))'
                     }}
                 >
                     KARDA
