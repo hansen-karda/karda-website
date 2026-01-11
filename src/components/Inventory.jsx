@@ -99,11 +99,7 @@ const Inventory = () => {
             {/* HEADER HUD */}
             <div className="flex justify-between items-end border-b border-white/20 pb-4 mb-8">
                 <div>
-                    <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v4.0</h2>
-                    <div className="flex items-center gap-2 mt-2 text-gray-400 text-xs tracking-wider">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                        <span>LIVE_FEED // SECURE_CONNECTION</span>
-                    </div>
+                    <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">INVENTORY</h2>
                 </div>
                 <div className="hidden md:block text-right text-gray-500 text-xs">
                     ID: KRD-{Math.floor(Math.random() * 90000) + 10000} // LOC: US_CENTRAL_VAULT
