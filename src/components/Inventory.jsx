@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar, Clock, CheckCircle, AlertTriangle, Maximize2, X, ZoomIn, ZoomOut } from 'lucide-react';
 import { client, urlFor } from '../sanityClient';
 import groq from 'groq';
 import transformerImg from '../assets/transformer-1.png';
@@ -54,6 +54,8 @@ const Inventory = () => {
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeImageIndex, setActiveImageIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
 
     // Boot Sequence & Data Fetching
     useEffect(() => {
@@ -213,7 +215,10 @@ const Inventory = () => {
                     <div className="flex-1 flex flex-col gap-4 min-h-[400px]">
 
                         {/* MAIN VIEW - DIGITAL HANGAR BACKGROUND */}
-                        <div className="flex-1 relative bg-[#0a0a0a] rounded-sm border border-white/10 flex items-center justify-center p-8 group overflow-hidden bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]">
+                        <div
+                            onClick={() => setLightboxOpen(true)}
+                            className="flex-1 relative bg-[#0a0a0a] rounded-sm border border-white/10 flex items-center justify-center p-8 group overflow-hidden bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] cursor-zoom-in"
+                        >
 
                             {/* VERIFIED BADGE */}
                             <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-green-500/10 border border-green-500/50 px-4 py-2 backdrop-blur-md">
@@ -221,11 +226,16 @@ const Inventory = () => {
                                 <span className="text-xs font-bold text-green-500 tracking-widest">QC VERIFIED</span>
                             </div>
 
+                            {/* INSPECT HINT */}
+                            <div className="absolute bottom-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 p-2 rounded backdrop-blur-sm border border-white/20">
+                                <Maximize2 size={20} className="text-white" />
+                            </div>
+
                             {selected.images && selected.images.length > 0 ? (
                                 <img
                                     src={selected.images[activeImageIndex]}
                                     alt="Active View"
-                                    className="w-full h-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 group-hover:scale-105 z-10"
+                                    className="w-full h-full object-contain filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-500 group-hover:scale-105 z-10 pointer-events-none"
                                 />
                             ) : (
                                 <div className="flex flex-col items-center gap-4 opacity-30">
@@ -234,6 +244,41 @@ const Inventory = () => {
                                 </div>
                             )}
                         </div>
+
+                        {/* LIGHTBOX OVERLAY */}
+                        {lightboxOpen && (
+                            <div className="fixed inset-0 z-[100] bg-black/95 flex flex-col animate-in fade-in duration-200">
+                                {/* Header */}
+                                <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-[#050505] z-50">
+                                    <div className="text-white/70 text-xs tracking-[0.2em] font-mono">
+                                        VISUAL_INSPECTION // {selected.name}
+                                    </div>
+                                    <button onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }} className="text-white hover:text-red-500 transition-colors">
+                                        <X size={24} />
+                                    </button>
+                                </div>
+
+                                {/* Image Area */}
+                                <div className="flex-1 overflow-auto flex items-center justify-center p-8 bg-[#0a0a0a] cursor-zoom-in" onClick={() => setZoomLevel(zoomLevel === 1 ? 2.5 : 1)}>
+                                    <img
+                                        src={selected.images[activeImageIndex]}
+                                        className={`transition-transform duration-300 ease-out origin-center object-contain shadow-2xl ${zoomLevel > 1 ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
+                                        style={{
+                                            transform: `scale(${zoomLevel})`,
+                                            maxHeight: zoomLevel > 1 ? 'none' : '85vh',
+                                            maxWidth: zoomLevel > 1 ? 'none' : '90vw'
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Footer Controls */}
+                                <div className="h-20 border-t border-white/10 bg-[#050505] flex items-center justify-center gap-8 z-50">
+                                    <button onClick={(e) => { e.stopPropagation(); setZoomLevel(1); }} className="text-white/50 hover:text-white p-2"><ZoomOut size={20} /></button>
+                                    <span className="font-mono text-xs text-green-500 w-12 text-center">{(zoomLevel * 100).toFixed(0)}%</span>
+                                    <button onClick={(e) => { e.stopPropagation(); setZoomLevel(2.5); }} className="text-white/50 hover:text-white p-2"><ZoomIn size={20} /></button>
+                                </div>
+                            </div>
+                        )}
 
                         {/* THUMBNAIL STRIP */}
                         {selected.images && selected.images.length > 1 && (
