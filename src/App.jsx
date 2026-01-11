@@ -43,14 +43,32 @@ const Navbar = () => {
 };
 
 const Hero = () => {
+    const [cursor, setCursor] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setCursor({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        });
+    };
+
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
             {/* Main Content */}
             <div className="z-10 flex flex-col items-center w-full max-w-[90vw]">
 
-                {/* THE WORD MARK */}
-                <h1 className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-400 to-gray-600 animate-pulse-slow select-none mb-12">
+                {/* THE WORD MARK - SPOTLIGHT EFFECT */}
+                <h1
+                    onMouseMove={handleMouseMove}
+                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-crosshair active:scale-95 transition-transform duration-100"
+                    style={{
+                        backgroundImage: `radial-gradient(circle 400px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #111111 80%, #000000 100%)`,
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}
+                >
                     KARDA
                 </h1>
 
