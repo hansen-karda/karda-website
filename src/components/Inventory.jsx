@@ -57,7 +57,7 @@ const Inventory = () => {
             setAssets(data);
             setSelected(data[0]);
             setLoading(false);
-        }, 700);
+        }, 300);
 
         return () => clearTimeout(bootTimer);
     }, []);
@@ -100,9 +100,6 @@ const Inventory = () => {
             <div className="flex justify-between items-end border-b border-white/20 pb-4 mb-8">
                 <div>
                     <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">INVENTORY</h2>
-                </div>
-                <div className="hidden md:block text-right text-gray-500 text-xs">
-                    ID: KRD-{Math.floor(Math.random() * 90000) + 10000} // LOC: US_CENTRAL_VAULT
                 </div>
             </div>
 
