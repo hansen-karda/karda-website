@@ -50,11 +50,6 @@ const Hero = () => {
                     PREMIER INFRASTRUCTURE ASSETS
                 </h2>
 
-                {/* TAGLINE */}
-                <p className="text-[10px] md:text-xs text-white/40 tracking-[0.3em] mb-20 text-center uppercase">
-                    The New Standard in Capital Allocation
-                </p>
-
                 {/* CTA */}
                 <Link to="/portfolio">
                     <button
