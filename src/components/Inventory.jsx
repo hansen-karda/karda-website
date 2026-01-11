@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar } from 'lucide-react';
 import { client, urlFor } from '../sanityClient';
 import groq from 'groq';
@@ -44,6 +44,7 @@ const REAL_ASSETS_V4 = [
 ];
 
 const Inventory = () => {
+    const navigate = useNavigate();
     const [assets, setAssets] = useState(null);
     const [selected, setSelected] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -243,13 +244,13 @@ const Inventory = () => {
                             </div>
 
                             <div className="mt-auto">
-                                <a
-                                    href={`mailto:n.hansen@karda.tech?subject=Acquisition Protocol: ${selected.id} - ${selected.name}&body=I am interested in acquiring the ${selected.name} (${selected.id}) located in ${selected.location}. Please provide full spec sheet and wiring capabilities.`}
+                                <button
+                                    onClick={() => navigate('/inquiry', { state: { asset: selected } })}
                                     className="w-full bg-white text-black font-bold uppercase py-4 px-8 hover:bg-green-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 tracking-wider group"
                                 >
                                     <span>Initiate Acquisition Protocol</span>
                                     <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

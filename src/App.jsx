@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react';
 import Inventory from './components/Inventory';
 import Contact from './components/Contact';
 import About from './components/About';
+import Inquiry from './components/Inquiry';
 
 const Navbar = () => {
     const location = useLocation();
@@ -55,7 +56,7 @@ const Hero = () => {
 
                 {/* SUBTITLE */}
                 <h2 className="text-xs md:text-sm font-nasa text-white/80 tracking-[0.5em] mb-4 text-center">
-                    PREMIER INFRASTRUCTURE ASSETS
+                    PREMIER INFRASTRUCTURE SOLUTIONS
                 </h2>
 
                 {/* CTA */}
@@ -84,6 +85,7 @@ function App() {
                 <Route path="/portfolio" element={<Inventory />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/inquiry" element={<Inquiry />} />
             </Routes>
         </div>
     );
