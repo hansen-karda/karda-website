@@ -3,6 +3,8 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 // IMPORT YOUR INVENTORY COMPONENT
 import Inventory from './components/Inventory';
+import Contact from './components/Contact';
+import About from './components/About';
 
 const Navbar = () => {
     const location = useLocation();
@@ -19,13 +21,13 @@ const Navbar = () => {
                 {[
                     { label: 'VENTURES', path: '/' },
                     { label: 'PORTFOLIO', path: '/portfolio' },
-                    { label: 'PROPRIETARY', path: '/' },
-                    { label: 'CONTACT', path: '/' }
+                    { label: 'ABOUT', path: '/about' },
+                    { label: 'CONTACT', path: '/contact' }
                 ].map((item) => (
                     <Link
                         key={item.label}
                         to={item.path}
-                        className={`text-[10px] font-nasa tracking-[0.3em] transition-opacity duration-300 ${location.pathname === item.path && item.label !== 'CONTACT' && item.label !== 'PROPRIETARY' ? 'text-white opacity-100' : 'text-white/60 hover:text-white hover:opacity-100'}`}
+                        className={`text-[10px] font-nasa tracking-[0.3em] transition-opacity duration-300 ${location.pathname === item.path ? 'text-white opacity-100' : 'text-white/60 hover:text-white hover:opacity-100'}`}
                     >
                         {item.label}
                     </Link>
@@ -80,6 +82,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/portfolio" element={<Inventory />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
             </Routes>
         </div>
     );
