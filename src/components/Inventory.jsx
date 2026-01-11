@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar, Clock, CheckCircle, AlertTriangle, Maximize2, X, ZoomIn, ZoomOut } from 'lucide-react';
+import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge, Scale, Calendar, Clock, CheckCircle, AlertTriangle, Maximize2, X, ZoomIn, ZoomOut, FileText } from 'lucide-react';
 import { client, urlFor } from '../sanityClient';
 import groq from 'groq';
 import transformerImg from '../assets/transformer-1.png';
@@ -61,7 +61,7 @@ const Inventory = () => {
     useEffect(() => {
         const initTerminal = async () => {
             try {
-                // 1. Fetch Real Data from Sanity
+                // 1. Fetch Comprehensive Data from Sanity
                 const query = groq`*[_type == "inventory"]{
                     ...,
                     "imageUrls": images[].asset->url
@@ -69,23 +69,28 @@ const Inventory = () => {
                 const sanityData = await client.fetch(query);
 
                 if (sanityData && sanityData.length > 0) {
-                    // 2. Map Sanity Data to UI Structure (Sanity First)
+                    // 2. Map Sanity Data to UI Structure (Strict Schema)
                     const liveAssets = sanityData.map(item => ({
                         id: item.id || 'NO-ID',
-                        name: item.type || 'Unnamed Asset', // Note: Schema uses 'type' for title/name
-                        type: 'Infrastructure',
-                        voltage: item.voltage || 'N/A',
-                        impedance: '5.75%', // Default for now
-                        location: 'USA LOGISTICS HUB', // Default
-                        weight: 'TBD',
-                        mfgYear: '2024',
-                        condition: 'CERTIFIED',
+                        name: item.type || 'Unnamed Asset',
+                        manufacturer: item.manufacturer || 'Unknown Mfg',
+                        type: 'Transformer', // Generic class for UI label
+                        voltage: item.primary_voltage && item.secondary_voltage
+                            ? `${item.primary_voltage} / ${item.secondary_voltage}`
+                            : item.voltage || 'Voltage TBD',
+                        kva: item.kva || 'Rating TBD',
+                        impedance: item.impedance || 'TBD',
+                        location: item.location || 'Logistics Hub',
+                        weight: item.weight || 'TBD',
+                        mfgYear: item.mfgYear || 'N/A',
+                        condition: item.condition || 'Used',
                         status: item.status || 'AVAILABLE',
-                        leadTimeSavings: '40+ WEEKS', // Sales Psychology Default
-                        price: item.price || 'Inquire for Price',
-                        description: item.desc || 'High-voltage infrastructure asset available for immediate deployment.',
+                        leadTimeSavings: item.lead_time || 'Immediate',
+                        price: item.price || 'Inquire',
+                        description: item.desc || 'No description available.',
                         images: item.imageUrls || [],
-                        specs: item.specs || { efficiency: 98, load: 100, shielding: 85 }
+                        warranty: item.warranty || 'None',
+                        specs: { efficiency: 99, load: 100, shielding: 90 }
                     }));
 
                     // Simulate Boot Delay
@@ -101,7 +106,7 @@ const Inventory = () => {
 
             } catch (err) {
                 console.warn("Uplink Failed or Empty, switching to Backup Protocol:", err);
-                setAssets(REAL_ASSETS_V5);
+                setAssets(REAL_ASSETS_V5); // Keep legacy backup just in case
                 setSelected(REAL_ASSETS_V5[0]);
                 setLoading(false);
             }
