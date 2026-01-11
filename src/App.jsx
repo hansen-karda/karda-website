@@ -45,13 +45,13 @@ const Navbar = () => {
 const Hero = () => {
     const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0, visible: false });
 
-    // Animation Loop: Keeps electricity flowing when cursor is stationary
+    // Animation Loop: Keeps sparks alive (Optimized interval)
     useEffect(() => {
         let interval;
         if (cursor.visible) {
             interval = setInterval(() => {
                 setCursor(prev => ({ ...prev, seed: Math.random() * 100 }));
-            }, 50); // 20fps Spark Loop
+            }, 60); // 60ms = ~15fps (Cinematic Spark Rate)
         }
         return () => clearInterval(interval);
     }, [cursor.visible]);
@@ -73,14 +73,15 @@ const Hero = () => {
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
-            {/* LIGHTNING FILTER DEFINITION */}
+            {/* OPTIMIZED SPARK FILTER */}
             <svg className="absolute w-0 h-0">
                 <defs>
                     <filter id="plasma-bolts" x="-50%" y="-50%" width="200%" height="200%">
+                        {/* 1 Octave = Max Performance. Turbulence = Jagged Sparks */}
                         <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.04"
-                            numOctaves="4"
+                            type="turbulence"
+                            baseFrequency="0.12"
+                            numOctaves="1"
                             seed={cursor.seed}
                             result="noise"
                         />
@@ -90,13 +91,13 @@ const Hero = () => {
                             values="0 0 0 0 0
                                     0 0 0 0 0
                                     0 0 0 0 0
-                                    0 0 0 130 -80"
-                            result="veins"
+                                    0 0 0 100 -60"
+                            result="sparks"
                         />
-                        {/* 130 -80 = Ultra Thin Filaments */}
+                        {/* Extreme Contrast for Dot/Spark isolation */}
                         <feFlood floodColor="#38bdf8" floodOpacity="1" result="color" />
-                        <feComposite operator="in" in="color" in2="veins" result="coloredveins" />
-                        <feComposite operator="in" in="coloredveins" in2="SourceGraphic" />
+                        <feComposite operator="in" in="color" in2="sparks" result="coloredSparks" />
+                        <feComposite operator="in" in="coloredSparks" in2="SourceGraphic" />
                     </filter>
                 </defs>
             </svg>
@@ -122,17 +123,17 @@ const Hero = () => {
                         KARDA
                     </h1>
 
-                    {/* LAYER 2: The Localized Plasma Ignition (Cursor Masked) */}
+                    {/* LAYER 2: The Spark Ignition (Cursor Masked) */}
                     <h1
                         className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
                         style={{
                             color: 'white',
-                            filter: 'url(#plasma-bolts) drop-shadow(0 0 4px #38bdf8)',
+                            filter: 'url(#plasma-bolts) drop-shadow(0 0 2px #38bdf8)',
                             mixBlendMode: 'screen',
                             opacity: cursor.visible ? 1 : 0,
-                            transition: 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                            WebkitMaskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 90%)`,
-                            maskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 90%)`
+                            transition: 'opacity 0.1s',
+                            WebkitMaskImage: `radial-gradient(circle 100px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 70%)`,
+                            maskImage: `radial-gradient(circle 100px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 70%)`
                         }}
                     >
                         KARDA
