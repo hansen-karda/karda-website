@@ -43,15 +43,20 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-    const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0 });
+    const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0, visible: false });
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setCursor({
             x: e.clientX - rect.left,
             y: e.clientY - rect.top,
-            seed: Math.random() * 100
+            seed: Math.random() * 100,
+            visible: true
         });
+    };
+
+    const handleMouseLeave = () => {
+        setCursor(prev => ({ ...prev, visible: false }));
     };
 
     return (
@@ -74,7 +79,7 @@ const Hero = () => {
                             values="0 0 0 0 0
                                     0 0 0 0 0
                                     0 0 0 0 0
-                                    0 0 0 25 -13"
+                                    0 0 0 45 -25"
                             result="veins"
                         />
                         <feFlood floodColor="#38bdf8" floodOpacity="1" result="color" />
@@ -91,6 +96,7 @@ const Hero = () => {
                 <div
                     className="relative mb-12"
                     onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseLeave}
                 >
                     {/* LAYER 1: The Classy Dark Metal Base (Dormant State) */}
                     <h1
@@ -111,9 +117,10 @@ const Hero = () => {
                             color: 'white',
                             filter: 'url(#plasma-bolts) drop-shadow(0 0 10px #38bdf8)',
                             mixBlendMode: 'screen',
-                            opacity: 1,
-                            WebkitMaskImage: `radial-gradient(circle 150px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`,
-                            maskImage: `radial-gradient(circle 150px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`
+                            opacity: cursor.visible ? 1 : 0,
+                            transition: 'opacity 0.2s ease-out',
+                            WebkitMaskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`,
+                            maskImage: `radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`
                         }}
                     >
                         KARDA
