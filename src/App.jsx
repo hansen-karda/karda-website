@@ -92,11 +92,11 @@ const Hero = () => {
                     className="relative mb-12"
                     onMouseMove={handleMouseMove}
                 >
-                    {/* LAYER 1: The Solid Metal Base */}
+                    {/* LAYER 1: The Classy Dark Metal Base (Dormant State) */}
                     <h1
                         className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none cursor-default relative z-10"
                         style={{
-                            backgroundImage: `linear-gradient(to bottom, #9ca3af 0%, #374151 100%)`,
+                            backgroundImage: `linear-gradient(to bottom, #4b5563 0%, #1f2937 100%)`, // Gunmetal
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                         }}
@@ -104,14 +104,16 @@ const Hero = () => {
                         KARDA
                     </h1>
 
-                    {/* LAYER 2: The Lightning Overlay */}
+                    {/* LAYER 2: The Localized Plasma Ignition (Cursor Masked) */}
                     <h1
                         className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
                         style={{
                             color: 'white',
-                            filter: 'url(#plasma-bolts) drop-shadow(0 0 8px #38bdf8)',
+                            filter: 'url(#plasma-bolts) drop-shadow(0 0 10px #38bdf8)',
                             mixBlendMode: 'screen',
-                            opacity: 1
+                            opacity: 1,
+                            WebkitMaskImage: `radial-gradient(circle 150px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`,
+                            maskImage: `radial-gradient(circle 150px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 80%)`
                         }}
                     >
                         KARDA
