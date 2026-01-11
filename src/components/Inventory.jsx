@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronRight, Activity, Zap, Shield, Box, MapPin, Gauge } from 'lucide-react';
 import { client, urlFor } from '../sanityClient';
 import groq from 'groq';
+import transformerImg from '../assets/transformer-1.png';
 
 // Hardcoded real assets for V3.0 per requested spec
 // In a real production scenario, we would map Sanity data to this structure
@@ -19,10 +21,9 @@ const REAL_ASSETS_V3 = [
         price: '$60,000',
         // GALLERY ARRAY
         images: [
-            '/assets/sunbelt-transformer.jpg', // Main front view
-            // Add placeholders if user hasnt uploaded yet, or duplicate for demo
-            '/assets/sunbelt-transformer.jpg',
-            '/assets/sunbelt-transformer.jpg'
+            transformerImg, // Main front view
+            transformerImg,
+            transformerImg
         ],
         specs: { efficiency: 98.5, load: 100, shielding: 85 }
     },
@@ -60,7 +61,7 @@ const Inventory = () => {
             setSelected(data[0]);
             setLoading(false);
 
-        }, 1500);
+        }, 700);
 
         return () => clearTimeout(bootTimer);
     }, []);
@@ -102,6 +103,9 @@ const Inventory = () => {
             {/* HEADER HUD */}
             <div className="flex justify-between items-end border-b border-white/20 pb-4 mb-8">
                 <div>
+                    <Link to="/" className="block mb-4 hover:opacity-70 transition-opacity">
+                        <h1 className="text-3xl font-black tracking-tighter italic">KARDA</h1>
+                    </Link>
                     <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v3.0</h2>
                     <div className="flex items-center gap-2 mt-2 text-gray-400 text-xs tracking-wider">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -209,8 +213,8 @@ const Inventory = () => {
                                         key={idx}
                                         onClick={() => setActiveImageIndex(idx)}
                                         className={`relative h-full aspect-square border-2 transition-all duration-300 overflow-hidden bg-gray-900 group ${activeImageIndex === idx
-                                                ? 'border-green-500 opacity-100'
-                                                : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
+                                            ? 'border-green-500 opacity-100'
+                                            : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
                                             }`}
                                     >
                                         <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
