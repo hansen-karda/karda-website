@@ -43,35 +43,60 @@ const Navbar = () => {
 };
 
 const Hero = () => {
-    const [cursor, setCursor] = useState({ x: 0, y: 0 });
+    const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0 });
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setCursor({
             x: e.clientX - rect.left,
-            y: e.clientY - rect.top
+            y: e.clientY - rect.top,
+            seed: Math.random() * 100
         });
     };
 
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
+            {/* PROCEDURAL LIGHTNING FILTER */}
+            <svg className="absolute w-0 h-0">
+                <defs>
+                    <filter id="electric-arc">
+                        <feTurbulence
+                            type="turbulence"
+                            baseFrequency="0.05"
+                            numOctaves="2"
+                            seed={cursor.seed}
+                            result="turbulence"
+                        />
+                        <feDisplacementMap
+                            in2="turbulence"
+                            in="SourceGraphic"
+                            scale="8"
+                            xChannelSelector="R"
+                            yChannelSelector="G"
+                        />
+                        <feGaussianBlur stdDeviation="0.5" result="blur" />
+                        <feComposite operator="in" in="SourceGraphic" in2="blur" result="composite" />
+                    </filter>
+                </defs>
+            </svg>
+
             {/* Main Content */}
             <div className="z-10 flex flex-col items-center w-full max-w-[90vw]">
 
-                {/* THE WORD MARK - HIGH VOLTAGE PLASMA */}
+                {/* THE WORD MARK - REAL LIGHTNING DISTORTION */}
                 <h1
                     onMouseMove={handleMouseMove}
-                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-default transition-transform duration-100"
+                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-default transition-opacity duration-100"
                     style={{
                         backgroundImage: `
-                            radial-gradient(circle 120px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #38bdf8 30%, transparent 60%),
+                            radial-gradient(circle 200px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #38bdf8 40%, transparent 80%),
                             linear-gradient(to bottom, #4b5563, #1f2937)
                         `,
                         backgroundBlendMode: 'hard-light, normal',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
-                        filter: 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.4))'
+                        filter: 'url(#electric-arc) drop-shadow(0 0 15px rgba(56, 189, 248, 0.6))'
                     }}
                 >
                     KARDA
