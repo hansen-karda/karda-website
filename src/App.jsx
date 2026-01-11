@@ -44,6 +44,7 @@ const Navbar = () => {
 
 const Hero = () => {
     const [cursor, setCursor] = useState({ x: 0, y: 0, seed: 0, visible: false });
+    const [btnHover, setBtnHover] = useState(false);
 
     // Animation Loop: Keeps the Galaxy Streaks moving
     useEffect(() => {
@@ -70,6 +71,9 @@ const Hero = () => {
         setCursor(prev => ({ ...prev, visible: false }));
     };
 
+    // Unified "Activation" state
+    const isActive = cursor.visible || btnHover;
+
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
@@ -77,7 +81,6 @@ const Hero = () => {
             <svg className="absolute w-0 h-0">
                 <defs>
                     <filter id="plasma-bolts" x="-50%" y="-50%" width="200%" height="200%">
-                        {/* 0.002 X = Stretched infinitely horizontal. 0.5 Y = Distinct rows */}
                         <feTurbulence
                             type="fractalNoise"
                             baseFrequency="0.002 0.5"
@@ -112,7 +115,7 @@ const Hero = () => {
                 >
                     {/* LAYER 1: The Classy Dark Metal Base (Dormant State) */}
                     <h1
-                        className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none cursor-default relative z-10"
+                        className="text-[15vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none cursor-default relative z-10"
                         style={{
                             backgroundImage: `linear-gradient(to bottom, #4b5563 0%, #1f2937 100%)`, // Gunmetal
                             WebkitBackgroundClip: 'text',
@@ -124,7 +127,7 @@ const Hero = () => {
 
                     {/* LAYER 2: The Galaxy Streak Ignition (Cursor Masked) */}
                     <h1
-                        className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
+                        className="absolute inset-0 text-[15vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
                         style={{
                             color: 'white',
                             filter: 'url(#plasma-bolts) drop-shadow(0 0 4px #38bdf8)',
@@ -144,33 +147,33 @@ const Hero = () => {
                     PREMIER INFRASTRUCTURE SOLUTIONS
                 </h2>
 
-                {/* CTA - FORCED YELLOW REACTIVITY */}
+                {/* CTA - PSYCHOLOGICAL TEXT SWAP */}
                 <Link to="/portfolio">
                     <button
                         className="group relative px-10 py-4 border transition-all duration-300 rounded-none overflow-hidden"
+                        onMouseEnter={() => setBtnHover(true)}
+                        onMouseLeave={() => setBtnHover(false)}
                         style={{
-                            borderColor: cursor.visible ? '#FACC15' : 'rgba(255,255,255,0.2)',
-                            boxShadow: cursor.visible ? '0 0 30px rgba(250,204,21,0.5)' : 'none',
-                            transform: cursor.visible ? 'scale(1.05)' : 'scale(1)'
+                            borderColor: isActive ? '#FACC15' : 'rgba(255,255,255,0.2)',
+                            boxShadow: isActive ? '0 0 30px rgba(250,204,21,0.5)' : 'none', // Strong Glow
+                            transform: isActive ? 'scale(1.05)' : 'scale(1)',
+                            backgroundColor: isActive ? 'rgba(250,204,21,0.1)' : 'transparent' // Subtle tint
                         }}
                     >
                         <span
-                            className="relative z-10 text-[10px] font-nasa tracking-[0.3em] transition-colors duration-300"
+                            className="relative z-10 text-[10px] font-nasa tracking-[0.3em] transition-colors duration-300 block min-w-[200px] text-center"
                             style={{
-                                color: cursor.visible ? '#FACC15' : 'white',
+                                color: isActive ? '#FACC15' : 'white',
+                                textShadow: isActive ? '0 0 10px rgba(250,204,21,0.8)' : 'none'
                             }}
                         >
-                            VIEW AVAILABLE INVENTORY &gt;
+                            {btnHover ? "SYSTEM READY // ENTER" : "VIEW AVAILABLE INVENTORY >"}
                         </span>
-
-                        {/* Hover Overlay (Only shows on actual mouse hover of button, independent of Logo effect) */}
-                        <div className="absolute inset-0 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ease-out" />
                     </button>
                 </Link>
 
-
-            </div >
-        </section >
+            </div>
+        </section>
     );
 };
 
