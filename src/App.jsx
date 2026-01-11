@@ -8,7 +8,11 @@ const Navbar = () => {
     const location = useLocation();
 
     return (
-        <nav className="fixed top-0 w-full z-50 mix-blend-difference px-8 md:px-16 py-8 flex justify-end items-center">
+        <nav className="fixed top-0 w-full z-50 mix-blend-difference px-8 md:px-16 py-8 flex justify-between items-center">
+            <Link to="/" className="text-2xl font-black tracking-tighter italic text-white hover:opacity-80 transition-opacity">
+                KARDA
+            </Link>
+
             <div className="hidden md:flex items-center gap-12">
                 {[
                     { label: 'VENTURES', path: '/' },

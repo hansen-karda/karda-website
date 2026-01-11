@@ -99,9 +99,6 @@ const Inventory = () => {
             {/* HEADER HUD */}
             <div className="flex justify-between items-end border-b border-white/20 pb-4 mb-8">
                 <div>
-                    <Link to="/" className="block mb-4 hover:opacity-70 transition-opacity">
-                        <h1 className="text-3xl font-black tracking-tighter italic">KARDA</h1>
-                    </Link>
                     <h2 className="text-xl md:text-2xl font-bold tracking-widest text-white uppercase">Asset_Terminal_v4.0</h2>
                     <div className="flex items-center gap-2 mt-2 text-gray-400 text-xs tracking-wider">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -201,8 +198,8 @@ const Inventory = () => {
                                         key={idx}
                                         onClick={() => setActiveImageIndex(idx)}
                                         className={`relative h-full aspect-square border-2 transition-all duration-300 overflow-hidden bg-gray-900 group ${activeImageIndex === idx
-                                                ? 'border-green-500 opacity-100'
-                                                : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
+                                            ? 'border-green-500 opacity-100'
+                                            : 'border-white/10 opacity-50 hover:opacity-100 hover:border-white/50'
                                             }`}
                                     >
                                         <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
