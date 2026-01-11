@@ -64,9 +64,14 @@ const Hero = () => {
                     onMouseMove={handleMouseMove}
                     className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-crosshair active:scale-95 transition-transform duration-100"
                     style={{
-                        backgroundImage: `radial-gradient(circle 300px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #9ca3af 50%, #4b5563 100%)`,
+                        backgroundImage: `
+                            radial-gradient(circle 100px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #38bdf8 25%, transparent 60%),
+                            linear-gradient(to bottom, #4b5563, #1f2937)
+                        `,
+                        backgroundBlendMode: 'overlay',
                         WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent'
+                        WebkitTextFillColor: 'transparent',
+                        filter: 'drop-shadow(0 0 1px rgba(56, 189, 248, 0.3))'
                     }}
                 >
                     KARDA
