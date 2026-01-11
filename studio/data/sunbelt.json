@@ -1,0 +1,22 @@
+{
+    "_type": "inventory",
+    "_id": "TR-SUNBELT-2500",
+    "name": "2500 kVA SUNBELT MULTI-TAP",
+    "type": "Sunbelt Solomon Multi-Tap Step-Up Unit",
+    "id": "TR-SUNBELT-2500",
+    "status": "AVAILABLE",
+    "price": "$45,000",
+    "kva": "2500",
+    "primary_voltage": "13.8kV (Multi-Tap)",
+    "secondary_voltage": "480V",
+    "impedance": "5.54%",
+    "location": "TEMPLE, TX",
+    "weight": "12,600 LBS",
+    "mfgYear": "2022",
+    "desc": "Versatile Multi-Tap configuration (13.8kV / 13.2kV / 12.47kV). Ideal for sites with fluctuating grid requirements or Bitcoin mining deployments. Recently tested.",
+    "specs": {
+        "efficiency": 98.9,
+        "load": 95,
+        "shielding": 60
+    }
+}

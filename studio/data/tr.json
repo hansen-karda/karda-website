@@ -1,0 +1,22 @@
+{
+    "_type": "inventory",
+    "_id": "TR-TR-2500",
+    "name": "2500 kVA T&R UTILITY SPEC",
+    "type": "T&R Electric Standard Distribution Pad",
+    "id": "TR-TR-2500",
+    "status": "AVAILABLE",
+    "price": "$55,000",
+    "kva": "2500",
+    "primary_voltage": "13200 Delta",
+    "secondary_voltage": "480Y/277",
+    "impedance": "5.72%",
+    "location": "COLMAN, SD",
+    "weight": "13,500 LBS",
+    "mfgYear": "2023",
+    "desc": "Reliable utility-grade unit. Reconditioned to IEEE standards. Dead front design. Perfect for commercial park distribution or solar tie-in.",
+    "specs": {
+        "efficiency": 99.0,
+        "load": 90,
+        "shielding": 50
+    }
+}

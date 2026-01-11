@@ -1,0 +1,19 @@
+{
+  "_type": "inventory",
+  "_id": "TR-MADDOX-2500",
+  "name": "2500 kVA MADDOX PREMIUM",
+  "type": "Maddox 2500 kVA Copper-Wound Padmount",
+  "ids": "TR-MADDOX-2500", 
+  "description": "New Surplus unit. Copper/Copper windings for maximum efficiency. 5-Legged Core design. Loop feed with bayonet fusing. Ready for immediate heavy-load deployment.",
+  "status": "AVAILABLE",
+  "price": "$62,500",
+  "kva": "2500",
+  "primary_voltage": "12470 Delta",
+  "secondary_voltage": "480Y/277",
+  "impedance": "5.75%",
+  "location": "GREENVILLE, SC",
+  "weight": "14,246 LBS",
+  "mfgYear": "2025",
+  "desc": "New Surplus unit. Copper/Copper windings for maximum efficiency. 5-Legged Core design. Loop feed with bayonet fusing. Ready for immediate heavy-load deployment.",
+  "specs": { "efficiency": 99.2, "load": 100, "shielding": 70 }
+}

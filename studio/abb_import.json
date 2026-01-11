@@ -1,0 +1,21 @@
+{
+    "_type": "inventory",
+    "_id": "TR-ABB-2500-PA",
+    "name": "2500 kVA ABB INDUSTRIAL 575V",
+    "type": "ABB SPS2 34.5kV Industrial Pad-Mount",
+    "desc": "Heavy-duty ABB SPS2 Series unit. High-voltage 34.5kV Primary to 575Y/332V Industrial Secondary. Ideal for heavy manufacturing, mining, or 600V-class facility expansions.",
+    "status": "AVAILABLE",
+    "price": "$95,000",
+    "primary_voltage": "34.5kV Delta",
+    "secondary_voltage": "575Y/332V",
+    "impedance": "5.75%",
+    "location": "PITTSBURGH, PA",
+    "weight": "13,500 LBS",
+    "mfgYear": "2015",
+    "lead_time": "Immediate",
+    "specs": {
+        "efficiency": 98.8,
+        "load": 100,
+        "shielding": 65
+    }
+}

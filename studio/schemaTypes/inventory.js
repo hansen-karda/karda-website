@@ -107,6 +107,25 @@ export default {
                 { name: 'shielding', title: 'Shielding (dB)', type: 'number' }
             ]
         },
+        {
+            name: 'techSpecs',
+            title: 'Deep Technical Specifications',
+            type: 'object',
+            group: 'technical',
+            fields: [
+                { name: 'coolingClass', title: 'Cooling Class', type: 'string' },
+                { name: 'oilType', title: 'Oil Type', type: 'string' },
+                { name: 'windings', title: 'Winding Material', type: 'string' },
+                { name: 'tempRise', title: 'Temperature Rise', type: 'string' },
+                { name: 'bil', title: 'BIL (Basic Impulse Level)', type: 'string' },
+                { name: 'taps', title: 'Taps Configuration', type: 'string' },
+                { name: 'dimensions', title: 'Dimensions', type: 'string' }
+            ],
+            options: {
+                collapsible: true,
+                collapsed: false
+            }
+        },
 
         // --- LOGISTICS & CONDITION ---
         {

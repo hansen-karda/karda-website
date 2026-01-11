@@ -39,17 +39,19 @@ const Inventory = () => {
                         efficiency,
                         load,
                         shielding
-                    }
+                    },
+                    techSpecs
                 }`;
                 const sanityData = await client.fetch(query);
 
                 if (sanityData && sanityData.length > 0) {
                     // 2. Map Sanity Data to UI Structure (Strict Schema)
                     const liveAssets = sanityData.map(item => ({
-                        id: item.id || 'NO-ID',
+                        // SMART ID GENERATION: Fallback to constructed ID if missing
+                        id: item.id || `TR-${(item.name || 'UNIT').split(' ')[0].toUpperCase()}-2500`,
                         name: item.name || 'Unnamed Asset',
                         fullName: item.fullName || 'Unnamed Asset',
-                        type: 'Transformer', // Generic class for UI label
+                        type: 'Transformer',
                         voltage: (item.primary_voltage && item.secondary_voltage)
                             ? `${item.primary_voltage} -> ${item.secondary_voltage}`
                             : 'Voltage TBD',
@@ -63,7 +65,8 @@ const Inventory = () => {
                         description: item.description || "Awaiting technical brief. Unit available for immediate dispatch.",
                         images: item.gallery || [],
                         mainImage: item.image,
-                        specs: item.specs || { efficiency: 0, load: 0, shielding: 0 }
+                        specs: item.specs || { efficiency: 0, load: 0, shielding: 0 },
+                        techSpecs: item.techSpecs
                     }));
 
                     // Simulate Boot Delay
@@ -145,7 +148,7 @@ const Inventory = () => {
 
             <div className="relative z-10 flex h-screen overflow-hidden">
                 {/* LEFT SIDEBAR - ASSET LIST */}
-                <div className="w-[350px] border-r border-white/10 flex flex-col bg-black/80 backdrop-blur-sm">
+                <div className="w-[350px] border-r border-white/10 flex flex-col bg-black/80 backdrop-blur-sm pt-24">
                     <div className="p-6 border-b border-white/10">
                         <div className="flex items-center justify-between mb-2">
                             <h2 className="text-xs font-bold text-yellow-400 tracking-[0.2em]">AVAILABLE ASSETS</h2>
@@ -181,7 +184,9 @@ const Inventory = () => {
                                         {asset.status}
                                     </span>
                                 </div>
-                                <h3 className="text-sm text-white/80 mb-1 truncate">{asset.name}</h3>
+                                <h3 className="text-sm text-white/90 mb-3 leading-relaxed font-medium block pr-4">
+                                    {asset.name}
+                                </h3>
                                 <div className="flex items-center gap-2 text-[10px] text-white/40">
                                     <span>{asset.mfgYear}</span>
                                     <span>•</span>
@@ -204,14 +209,19 @@ const Inventory = () => {
                     {selected ? (
                         <>
                             {/* HEADER */}
-                            <header className="p-8 border-b border-white/10 flex justify-between items-start sticky top-0 bg-black/90 backdrop-blur-md z-20">
+                            <header className="pt-24 px-8 pb-8 border-b border-white/10 flex justify-between items-start sticky top-0 bg-black/90 backdrop-blur-md z-20">
                                 <div>
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <h1 className="text-3xl font-bold text-white tracking-tight">{selected.fullName || selected.name}</h1>
+                                    {/* VISUAL FIX: Stacked Layout to prevents collision */}
+                                    <div className="flex flex-col items-start gap-4 mb-6">
                                         <div className="px-3 py-1 border border-yellow-400/30 bg-yellow-400/10 text-yellow-400 text-xs tracking-wider rounded">
-                                            {selected.leadTimeSavings} SAVINGS
+                                            {/* TYPO FIX: "SHIPS: IMMEDIATE" */}
+                                            SHIPS: {selected.leadTimeSavings === 'Immediate' || selected.leadTimeSavings === 'Ready to Ship' ? 'IMMEDIATE' : selected.leadTimeSavings.toUpperCase()}
                                         </div>
+                                        <h1 className="text-2xl md:text-4xl font-bold text-white tracking-tight leading-relaxed max-w-4xl">
+                                            {selected.fullName || selected.name}
+                                        </h1>
                                     </div>
+
                                     <div className="flex items-center gap-6 text-xs text-white/60">
                                         <div className="flex items-center gap-2">
                                             <MapPin className="w-3 h-3 text-yellow-500" />
@@ -231,7 +241,9 @@ const Inventory = () => {
                                     <div className="text-sm text-white/40 mb-1">UNIT PRICE</div>
                                     <div className="text-2xl font-bold text-green-400">
                                         {selected.price && selected.price !== 'Inquire'
-                                            ? `$${parseInt(selected.price.replace(/[^0-9]/g, '')).toLocaleString()}`
+                                            ? (typeof selected.price === 'number'
+                                                ? `$${selected.price.toLocaleString()}`
+                                                : `$${parseInt(selected.price.toString().replace(/[^0-9]/g, '')).toLocaleString()}`)
                                             : selected.price}
                                     </div>
                                 </div>
@@ -348,6 +360,32 @@ const Inventory = () => {
                                             </div>
                                         </div>
                                     </div>
+
+                                    {/* DEEP SPECS TABLE */}
+                                    {selected.techSpecs && (
+                                        <div className="mt-8 pt-6 border-t border-white/10">
+                                            <div className="text-sm font-bold text-white tracking-widest mb-4 flex items-center gap-2">
+                                                <div className="w-1 h-1 bg-yellow-400 rounded-full" />
+                                                TECHNICAL SPECIFICATIONS
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-px bg-white/10 border border-white/10 text-sm">
+                                                {Object.entries(selected.techSpecs).map(([key, value]) => {
+                                                    if (!value) return null;
+                                                    const label = key.replace(/([A-Z])/g, ' $1').toUpperCase();
+                                                    return (
+                                                        <div key={key} className="bg-black/80 flex gap-4 p-3 hover:bg-white/5 transition-colors">
+                                                            <div className="w-1/3 text-white/40 text-xs font-mono uppercase tracking-wider flex items-center">
+                                                                {label}
+                                                            </div>
+                                                            <div className="flex-1 text-white font-mono text-xs md:text-sm truncate">
+                                                                {value}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
 
                                     {/* ACTIONS */}
                                     <button className="w-full py-4 bg-yellow-400 text-black font-bold tracking-widest hover:bg-yellow-300 transition-colors flex items-center justify-center gap-2">
