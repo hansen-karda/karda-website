@@ -57,50 +57,66 @@ const Hero = () => {
     return (
         <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-black">
 
-            {/* PROCEDURAL LIGHTNING FILTER */}
+            {/* LIGHTNING FILTER DEFINITION */}
             <svg className="absolute w-0 h-0">
                 <defs>
-                    <filter id="electric-arc">
+                    <filter id="plasma-bolts" x="-50%" y="-50%" width="200%" height="200%">
                         <feTurbulence
-                            type="turbulence"
-                            baseFrequency="0.05"
-                            numOctaves="2"
+                            type="fractalNoise"
+                            baseFrequency="0.04"
+                            numOctaves="3"
                             seed={cursor.seed}
-                            result="turbulence"
+                            result="noise"
                         />
-                        <feDisplacementMap
-                            in2="turbulence"
-                            in="SourceGraphic"
-                            scale="8"
-                            xChannelSelector="R"
-                            yChannelSelector="G"
+                        <feColorMatrix
+                            in="noise"
+                            type="matrix"
+                            values="0 0 0 0 0
+                                    0 0 0 0 0
+                                    0 0 0 0 0
+                                    0 0 0 25 -13"
+                            result="veins"
                         />
-                        <feGaussianBlur stdDeviation="0.5" result="blur" />
-                        <feComposite operator="in" in="SourceGraphic" in2="blur" result="composite" />
+                        <feFlood floodColor="#38bdf8" floodOpacity="1" result="color" />
+                        <feComposite operator="in" in="color" in2="veins" result="coloredveins" />
+                        <feComposite operator="in" in="coloredveins" in2="SourceGraphic" />
                     </filter>
                 </defs>
             </svg>
 
             {/* Main Content */}
-            <div className="z-10 flex flex-col items-center w-full max-w-[90vw]">
+            <div className="z-10 flex flex-col items-center w-full max-w-[90vw] relative">
 
-                {/* THE WORD MARK - REAL LIGHTNING DISTORTION */}
-                <h1
+                {/* THE WORD MARK COMPOSITE */}
+                <div
+                    className="relative mb-12"
                     onMouseMove={handleMouseMove}
-                    className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none mb-12 cursor-default transition-opacity duration-100"
-                    style={{
-                        backgroundImage: `
-                            radial-gradient(circle 200px at ${cursor.x}px ${cursor.y}px, #ffffff 0%, #38bdf8 40%, transparent 80%),
-                            linear-gradient(to bottom, #4b5563, #1f2937)
-                        `,
-                        backgroundBlendMode: 'hard-light, normal',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        filter: 'url(#electric-arc) drop-shadow(0 0 15px rgba(56, 189, 248, 0.6))'
-                    }}
                 >
-                    KARDA
-                </h1>
+                    {/* LAYER 1: The Solid Metal Base */}
+                    <h1
+                        className="text-[12vw] leading-none font-black tracking-tighter text-transparent bg-clip-text select-none cursor-default relative z-10"
+                        style={{
+                            backgroundImage: `linear-gradient(to bottom, #9ca3af 0%, #374151 100%)`,
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                        }}
+                    >
+                        KARDA
+                    </h1>
+
+                    {/* LAYER 2: The Lightning Overlay */}
+                    <h1
+                        className="absolute inset-0 text-[12vw] leading-none font-black tracking-tighter select-none pointer-events-none z-20"
+                        style={{
+                            color: 'white',
+                            filter: 'url(#plasma-bolts) drop-shadow(0 0 8px #38bdf8)',
+                            mixBlendMode: 'screen',
+                            opacity: 1
+                        }}
+                    >
+                        KARDA
+                    </h1>
+                </div>
 
                 {/* SUBTITLE */}
                 <h2 className="text-xs md:text-sm font-nasa text-white/80 tracking-[0.5em] mb-4 text-center">
